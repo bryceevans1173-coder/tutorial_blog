@@ -1,5 +1,14 @@
 ---
-title: "About"
+title: "About Me"
+image: images/IMG_2538.jpeg
+about:
+  template: jolla
+  image-shape: round
+  image-alt: "Photo of Bryson Evans"
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/bryceevans1173-coder
 ---
 
-About this site
+Hi, I'm Bryson Evans and I am a statistics student doing my undergraduate at BYU. I love football, bayesian statistics and machine learning.

@@ -1,7 +1,6 @@
 ---
-title: "Project Demo"
+title: "Welcome"
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+I'm a STAT 386 student. Read my tutorial on
+[How to Build a Transformer](posts/tutorial.qmd) or learn [about me](about.qmd).

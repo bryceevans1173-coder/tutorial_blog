@@ -29,6 +29,11 @@ On top of this, we use transformers when we are trying to classify something or 
 
 ![Figure 2: The hand drawn number images data set contains 8 x 8 pixel images of hand drawn digits, as well as the digits that they represent.](../images/sklearn-digits.png){fig-alt="The hand drawn number image data set provides the pixel values and the correct supervised label." width=80%}
 
+The dataset is built into scikit-learn. See the
+[`load_digits` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html)
+for the full list of attributes, or read about its origin on the
+[UCI Optical Recognition of Handwritten Digits page](https://archive.ics.uci.edu/ml/datasets/Optical+Recognition+of+Handwritten+Digits).
+
 Another criteria for using a transformer is when the data we are working with is very complex. More specifically, when the data is nonlinear, multicolinear (variables in the data are related to each other), and full of complicated interactions between variables. If you are unfamiliar with these concepts, ask an LLM to help you identify if these things may be a risk. We will not cover them in detail here, but they are very important statistical concepts to learn. 
 
 Finally, we need to understand that transformers require a lot of data, or tokens, to train properly. The more complex the data is, the more of it we need. The hand drawn digit image data set has almost 1800 images to use, which is on the very low end of data sizes that we need for these types of problems. This will work for the small model we are going to build, but in many cases, we may need millions of tokens to train on. If you don't have access to this much data, you may need to consider a model other than a transformer. As a simple rule of thumb, we need to take the number of parameters in the transformer, which we'll discuss next, and multiply it by 10-20, and possibly more, to determine how many tokens you'll need. 
