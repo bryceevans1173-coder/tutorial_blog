@@ -27,7 +27,7 @@ As an example, we are going to use pixels from images of hand-drawn numbers as o
 
 On top of this, we use transformers when we are trying to classify something or output a number that can be checked with the correct answer. For example, in our hand drawn images, we want the transformer to be able to look at all the pixels and return the correct answer for what number has been drawn. To do this, we need to have the correct answer key available. This is called supervised learning.
 
-![Figure 2: The hand drawn number images data set contains 8 x 8 pixel images of hand drawn digits, as well as the digits that they represent.](../images/sklearn-digits.png.png){fig-alt="The hand drawn number image data set provides the pixel values and the correct supervised label." width=80%}
+![Figure 2: The hand drawn number images data set contains 8 x 8 pixel images of hand drawn digits, as well as the digits that they represent.](../images/sklearn-digits.png){fig-alt="The hand drawn number image data set provides the pixel values and the correct supervised label." width=80%}
 
 Another criteria for using a transformer is when the data we are working with is very complex. More specifically, when the data is nonlinear, multicolinear (variables in the data are related to each other), and full of complicated interactions between variables. If you are unfamiliar with these concepts, ask an LLM to help you identify if these things may be a risk. We will not cover them in detail here, but they are very important statistical concepts to learn. 
 

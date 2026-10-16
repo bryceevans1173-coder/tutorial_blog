@@ -205,7 +205,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>In 2017, researchers from Google published a paper titled “Attention is All You Need”, which provided the backbone, called a transformer, for AI language models like ChatGPT, Claude, Gemini, and many others that we use so often in today’s world. Transformers are powerful for many cases beyond words and language, as they can accept data and learn complex patterns in how this data predicts certain outputs. In this tutorial, we will learn how to identify when a transformer can be used, how to make certain design decisions that are needed for the transformer to work, and how to use AI to help us build it.</p>
-<p><img src="images/selfDriving.png" class="img-fluid" alt="Figure 1: The attention mechanism of a transformer helps a self-driving car combine video and data from sensors to identify hazards">{fig-alt=” ” width=80%}</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/selfDriving.png" class="img-fluid figure-img" style="width:80.0%" alt="Diagram of a self-driving car feeding camera and sensor data into a transformer that highlights hazards"></p>
+<figcaption>Figure 1: The attention mechanism of a transformer helps a self-driving car combine video and data from sensors to identify hazards</figcaption>
+</figure>
+</div>
 </section>
 <section id="steps-for-building-a-transformer" class="level2">
 <h2 class="anchored" data-anchor-id="steps-for-building-a-transformer">Steps for Building a Transformer</h2>
@@ -250,7 +255,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>As an example, we are going to use pixels from images of hand-drawn numbers as our tokens, and we will try to use the pixels to determine which number was drawn.</p>
 <p>On top of this, we use transformers when we are trying to classify something or output a number that can be checked with the correct answer. For example, in our hand drawn images, we want the transformer to be able to look at all the pixels and return the correct answer for what number has been drawn. To do this, we need to have the correct answer key available. This is called supervised learning.</p>
-<p><img src="sklearn-digits.png" class="img-fluid" alt="Figure 2: The sklearn handwritten digits dataset contains both the grid of pixels and the correct answer for what number has been drawn.">{fig-alt=” ” width=80%}</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/sklearn-digits.png.png" class="img-fluid figure-img" style="width:80.0%" alt="The hand drawn number image data set provides the pixel values and the correct supervised label."></p>
+<figcaption>Figure 2: The hand drawn number images data set contains 8 x 8 pixel images of hand drawn digits, as well as the digits that they represent.</figcaption>
+</figure>
+</div>
 <p>Another criteria for using a transformer is when the data we are working with is very complex. More specifically, when the data is nonlinear, multicolinear (variables in the data are related to each other), and full of complicated interactions between variables. If you are unfamiliar with these concepts, ask an LLM to help you identify if these things may be a risk. We will not cover them in detail here, but they are very important statistical concepts to learn.</p>
 <p>Finally, we need to understand that transformers require a lot of data, or tokens, to train properly. The more complex the data is, the more of it we need. The hand drawn digit image data set has almost 1800 images to use, which is on the very low end of data sizes that we need for these types of problems. This will work for the small model we are going to build, but in many cases, we may need millions of tokens to train on. If you don’t have access to this much data, you may need to consider a model other than a transformer. As a simple rule of thumb, we need to take the number of parameters in the transformer, which we’ll discuss next, and multiply it by 10-20, and possibly more, to determine how many tokens you’ll need.</p>
 </section>
@@ -281,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <p>Here an example of what your python code and output should look like:</p>
-<div id="9f66ebc0" class="cell" data-execution_count="1">
+<div id="20d01c65" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
@@ -355,10 +365,7 @@ d_model   params |  train   val (mean ± std)
      64  102,090 |  0.995     0.957 ± 0.010</code></pre>
 </div>
 </div>
-<p>Output:</p>
-<p>Images: (1797, 8, 8), classes: 10</p>
-<p>d_model params | train val (mean ± std) 16 7,098 | 0.982 0.947 ± 0.009 32 26,474 | 0.998 0.964 ± 0.013 64 102,090 | 0.995 0.957 ± 0.010</p>
-<p>In our training run, we found that 32 dimensions fit the data best in the validation set with 0.964 accuracy and minimal variance about that number. Therefore, in our case we can conclude that 32 dimensions was enough for the transformer to learn the complex relationships between the pixels and digits.</p>
+<p>In our training run, we found that 32 dimensions fit the data best in the validation set with 0.964 accuracy and minimal variance about that number. Therefore, in our case we can conclude that 32 dimensions was enough for the transformer to learn the complex relationships between the pixels and digits. One caveat to mention is that for this problem, since the images are just 8 x 8 pixels, a transformer probably won’t beat a simpler model such as an MLP. This is just a demonstration.</p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
