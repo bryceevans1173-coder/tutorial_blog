@@ -8,7 +8,7 @@
 
 <meta name="author" content="Bryson Evans">
 
-<title>How to Build a Transformer – Tutorial Blog - How to Build a Transformer</title>
+<title>How to Build a Transformer – Tutorial Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Tutorial Blog - How to Build a Transformer</span>
+    <span class="navbar-title">Tutorial Blog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -204,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In 2017, researchers from Google published a paper titled “Attention is All You Need”, which provided the backbone, called a transformer, for AI language models like ChatGPT, Claude, Gemini, and many others that we use so often in today’s world. Transformers are powerful for many cases beyond words and language, as they can accept data and learn complex patterns in how this data predicts certain outputs. In this tutorial, we will learn how to identify when a transformer can be used, how to make certain design decisions that are needed for the transformer to work, and how to use AI to help us build it.</p>
+<p>In 2017, researchers from Google published a paper titled “Attention Is All You Need”, which provided the backbone, called a transformer, for AI language models like ChatGPT, Claude, Gemini, and many others that we use so often in today’s world. Transformers are powerful for many cases beyond words and language, as they can accept data and learn complex patterns in how this data predicts certain outputs. In this tutorial, we will learn how to identify when a transformer can be used, how to make certain design decisions that are needed for the transformer to work, and how to use AI to help us build it.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../images/selfDriving.png" class="img-fluid figure-img" style="width:80.0%" alt="Diagram of a self-driving car feeding camera and sensor data into a transformer that highlights hazards"></p>
@@ -254,7 +254,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>As an example, we are going to use pixels from images of hand-drawn numbers as our tokens, and we will try to use the pixels to determine which number was drawn.</p>
-<p>On top of this, we use transformers when we are trying to classify something or output a number that can be checked with the correct answer. For example, in our hand drawn images, we want the transformer to be able to look at all the pixels and return the correct answer for what number has been drawn. To do this, we need to have the correct answer key available. This is called supervised learning.</p>
+<p>On top of this, we often use transformers when we are trying to classify something or output a number that can be checked with the correct answer. For example, in our hand drawn images, we want the transformer to be able to look at all the pixels and return the correct answer for what number has been drawn. To do this in our case, we need to have the correct answer key available. This is called supervised learning.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../images/sklearn-digits.png" class="img-fluid figure-img" style="width:80.0%" alt="The hand drawn number image data set provides the pixel values and the correct supervised label."></p>
@@ -262,15 +262,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 <p>The dataset is built into scikit-learn. See the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html"><code>load_digits</code> documentation</a> for the full list of attributes, or read about its origin on the <a href="https://archive.ics.uci.edu/ml/datasets/Optical+Recognition+of+Handwritten+Digits">UCI Optical Recognition of Handwritten Digits page</a>.</p>
-<p>Another criteria for using a transformer is when the data we are working with is very complex. More specifically, when the data is nonlinear, multicolinear (variables in the data are related to each other), and full of complicated interactions between variables. If you are unfamiliar with these concepts, ask an LLM to help you identify if these things may be a risk. We will not cover them in detail here, but they are very important statistical concepts to learn.</p>
-<p>Finally, we need to understand that transformers require a lot of data, or tokens, to train properly. The more complex the data is, the more of it we need. The hand drawn digit image data set has almost 1800 images to use, which is on the very low end of data sizes that we need for these types of problems. This will work for the small model we are going to build, but in many cases, we may need millions of tokens to train on. If you don’t have access to this much data, you may need to consider a model other than a transformer. As a simple rule of thumb, we need to take the number of parameters in the transformer, which we’ll discuss next, and multiply it by 10-20, and possibly more, to determine how many tokens you’ll need.</p>
+<p>Another criterion for using a transformer is when the data we are working with is very complex. More specifically, we use them when the data is nonlinear and full of complicated interactions between variables.</p>
+<p>Finally, we need to understand that transformers require a lot of data, or tokens, to train properly. The more complex the data is, the more of it we need. The hand drawn digit image data set has almost 1800 images to use, which is on the very low end of data sizes that we need for these types of problems. This will work for the small model we are going to build, but in many cases, we may need millions of tokens to train on. If you don’t have access to this much data, you may need to consider a model other than a transformer.</p>
 </section>
 <section id="step-2" class="level3">
 <h3 class="anchored" data-anchor-id="step-2">Step 2:</h3>
-<p>An important thing to consider is how we design the dimensions of the model. A transformer is really just a series of matrix multiplication. We get to decide how big these matrices are and how much information they can hold.</p>
+<p>An important thing to consider is how we design the dimensions of the model. A transformer is really just a series of matrix multiplications. We get to decide how big these matrices are and how much information they can hold.</p>
 <p>This process can be very detailed, but for your first transformer, we are going to make 2 decisions that will help an LLM make the rest of the less consequential decisions and create the correct architecture.</p>
-<p><strong>Decision 1:</strong> How do you cut your data into tokens? First, we need to analyze the dimensions of the data we already have. For the hand drawn images, we have an 8 x 8 group of pixels forming each image. We need to decide how to split these pixels up into tokens. 1 pixel per token would be too small because it would not contain enough information for the model to analyze. Dividing the image up into 4 x 4 pixel regions would be too big because that would leave us with only 4 tokens, which is too few tokens for the attention to compare. Remember, the transformer needs to be able to compare the information inside each token, as well as be able to compare all the tokens together. For this example, we are going to use a good balance of the two by creating tokens of 2 x 2 pixel regions, which leaves us 16 tokens per image.</p>
-<p><strong>Decision 2:</strong> How big should the model be? This is the tricky part. We need to think about the model width, or how many dimensions the model needs. Think of the dimensions as available slots that can hold information. A transformer needs to take the pixel values from your tokens that then learn information about how those tokens relate to themselves and others, and how those relationships tell us which number has been drawn in the image. We need to pick the number of dimensions that will allow the transformer to learn and record these relationships while also not creating too many parameters, or numbers in the transformer’s matrices, that will increase the amount of data that we need. For this problem, we are going to ask an LLM to help us try 3 different widths to see which works best. We are going to try 16, 32, and 64 dimensions. Remember, as the dimensions increase, we will need more data for the model to learn properly. However, the more complex the data is, the more dimensions we need, and determining the right number often requires trying multiple dimensions to see which works best.</p>
+<p><strong>Decision 1:</strong> How do you cut your data into tokens? First, we need to analyze the dimensions of the data we already have. For the hand drawn images, we have an 8 x 8 group of pixels forming each image. We need to decide how to split these pixels up into tokens. 1 pixel per token would be too small because it would not contain enough information for the model to analyze. Dividing the image up into 4 x 4 pixel regions would be too big because that would leave us with only 4 tokens, which is too few tokens for the attention mechanism to compare. Attention is how the model decides which tokens matter most to each other, for example which pixels together form the curve of a 3. Remember, the transformer needs to be able to compare the meaningful information inside all the tokens together. For this example, we are going to use a good balance of the two by creating tokens of 2 x 2 pixel regions, which leaves us 16 tokens per image.</p>
+<p><strong>Decision 2:</strong> How big should the model be? This is the tricky part. We need to think about the model width, or how many dimensions the model needs. Think of the dimensions as available slots that can hold information. A transformer needs to take the pixel values from your tokens that then learn information about how those tokens relate to themselves and others, and how those relationships tell us which number has been drawn in the image. We need to pick the number of dimensions that will allow the transformer to learn and record these relationships while also not creating too many parameters, or numbers in the transformer’s matrices, that will increase the amount of data that we need. For this problem, we are going to ask an LLM to help us try 3 different widths to see which works best. We are going to try 16, 32, and 64 dimensions. We’ll also fix the depth, the number of times the attention block repeats, at 2. Remember, as the dimensions increase, we will need more data for the model to learn properly. However, the more complex the data is, the more dimensions we need, and determining the right number often requires trying multiple dimensions to see which works best.</p>
 </section>
 <section id="step-3" class="level3">
 <h3 class="anchored" data-anchor-id="step-3">Step 3:</h3>
@@ -278,21 +278,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>“Write 3 minimal Vision Transformers in PyTorch to classify the scikit-learn digits dataset (load_digits), and help us determine if 16, 32, or 64 is the best model width for predicting out of sample data.</p>
 <p>Data facts: - 1,797 grayscale images, 8x8, pixel values 0 to 16 (normalize them) - 10 classes - Small dataset, so use dropout and weight decay</p>
 <p>Model choices: - 2x2 patches (16 tokens) plus a class token - d_model = (16, 32, and 64 width), 2 layers - Choose a sensible number of attention heads and feed-forward size</p>
-<p>Include: train/validation split, a training loop, and final accuracy. Must run on a CPU in under a minute. Add short comments explaining each part.”</p>
+<p>Include: 5-fold Cross-Validation, a training loop, and final accuracy. Must run on a CPU in only a few minutes. Add short comments explaining each part.”</p>
 </section>
 <section id="step-4" class="level3">
 <h3 class="anchored" data-anchor-id="step-4">Step 4:</h3>
-<p>Now we are going to train the transformer, or use the data to help the transformer adjust its parameters until it can accurately determine which image has been drawn. Look at the above prompt and how we asked the model to include a train/validation split. This means that we are going to split the data set into a large portion for the model to use in its learning process, and a smaller portion for us to use and determine how the model is performing. This is very important because we often care most about how accurate the model is in making predictions for data it has never seen before, not just the data it used in the learning process. This is especially important for us because we want to use this never-before-seen data to test wether the 16, 32, or 64 dimensional model is better at predicting the correct digit. We should always do this for supervised learning models where accuracy is important. The idea of splitting the data into a training and validation set is called cross-validation.</p>
+<p>Now we are going to train the transformer, or use the data to help the transformer adjust its parameters until it can accurately determine which image has been drawn. Look at the above prompt and how we asked the model to include a 5-fold cross validation. This means that we are going to split the data set into a large portion for the model to use in its learning process, and a smaller portion for us to use and determine how the model is performing. We will then repeat this process 5 times. This is very important because we often care most about how accurate the model is in making predictions for data it has never seen before, not just the data it used in the learning process. This is especially important for us because we want to use this never-before-seen data to test whether the 16, 32, or 64 dimensional model is better at predicting the correct digit. We should always do this for supervised learning models where accuracy is important.</p>
 </section>
 <section id="step-5" class="level3">
 <h3 class="anchored" data-anchor-id="step-5">Step 5:</h3>
-<p>Now, execute the python code and start the model training. Based on how you are working on your code, you can ask AI to help you run the script or debug any errors. Once the training is finished, compare the accuracy of the model for each of the dimension sizes on the out-of-sample data. Pick the model with the best accuracy, and you now have a trained vision transformer that can recognize the correct number from a hand-drawn image of the same format.</p>
+<p>Now, execute the python code and start the model training. Based on how you are working on your code, you can ask AI to help you run the script or debug any errors. Once the training is finished, compare the accuracy of the model for each of the dimension sizes on the out-of-sample data. Pick the model with the best accuracy, and you now have transformer with the best width for our problem. In practice you would then retrain at that width on all the data; we stop here because our goal was choosing the width.</p>
 </section>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<p>Here an example of what your python code and output should look like:</p>
-<div id="c21273d8" class="cell" data-execution_count="1">
+<p>Here is an example of what your python code and output should look like:</p>
+<div id="e0c1ebc2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
@@ -370,7 +370,7 @@ d_model   params |  train   val (mean ± std)
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>Congradulations, you have created a modern machine learning model that is the same architecture as the large language models that mystify billions of people. While this tutorial is much simpler than these massive models, these concepts are very important to how they work. If you want to continue learning about transformers, consider looking into the depth of the network, how we can use different configurations for the learning rate, backpropagation, attention heads, and much more.</p>
+<p>Congratulations, you have created a modern machine learning model that is the same architectural building blocks as the large language models that mystify millions of people. You now understand basic concepts about the use cases of transformers, tokens, model dimensions, and train-test split. While this tutorial is much simpler than these massive models, these concepts are very important to how they work. If you want to continue learning about transformers, consider looking into how we configure the depth of the network and how we can use different configurations for the learning rate to accommodate more complex data problems.</p>
 
 
 </section>
