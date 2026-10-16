@@ -8,7 +8,7 @@ author: "Bryson Evans"
 
 In 2017, researchers from Google published a paper titled "Attention is All You Need", which provided the backbone, called a transformer, for AI language models like ChatGPT, Claude, Gemini, and many others that we use so often in today's world. Transformers are powerful for many cases beyond words and language, as they can accept data and learn complex patterns in how this data predicts certain outputs. In this tutorial, we will learn how to identify when a transformer can be used, how to make certain design decisions that are needed for the transformer to work, and how to use AI to help us build it. 
 
-![Figure 1: The attention mechanism of a transformer helps a self-driving car combine video and data from sensors to identify hazards](images/selfDriving.png){fig-alt=" " width=80%}
+![Figure 1: The attention mechanism of a transformer helps a self-driving car combine video and data from sensors to identify hazards](../images/selfDriving.png){fig-alt="Diagram of a self-driving car feeding camera and sensor data into a transformer that highlights hazards" width=80%}
 
 ## Steps for Building a Transformer
 ### Step 1:
@@ -27,7 +27,7 @@ As an example, we are going to use pixels from images of hand-drawn numbers as o
 
 On top of this, we use transformers when we are trying to classify something or output a number that can be checked with the correct answer. For example, in our hand drawn images, we want the transformer to be able to look at all the pixels and return the correct answer for what number has been drawn. To do this, we need to have the correct answer key available. This is called supervised learning.
 
-![Figure 2: The sklearn handwritten digits dataset contains both the grid of pixels and the correct answer for what number has been drawn.](sklearn-digits.png){fig-alt=" " width=80%}
+![Figure 2: The hand drawn number images data set contains 8 x 8 pixel images of hand drawn digits, as well as the digits that they represent.](../images/sklearn-digits.png.png){fig-alt="The hand drawn number image data set provides the pixel values and the correct supervised label." width=80%}
 
 Another criteria for using a transformer is when the data we are working with is very complex. More specifically, when the data is nonlinear, multicolinear (variables in the data are related to each other), and full of complicated interactions between variables. If you are unfamiliar with these concepts, ask an LLM to help you identify if these things may be a risk. We will not cover them in detail here, but they are very important statistical concepts to learn. 
 
@@ -140,16 +140,7 @@ for d_model in [16, 32, 64]:
           f"{np.mean(va_accs):>9.3f} ± {np.std(va_accs):.3f}")
 ```
 
-Output:
-
-Images: (1797, 8, 8), classes: 10
-
-d_model   params |  train   val (mean ± std)
-     16    7,098 |  0.982     0.947 ± 0.009
-     32   26,474 |  0.998     0.964 ± 0.013
-     64  102,090 |  0.995     0.957 ± 0.010
-
-In our training run, we found that 32 dimensions fit the data best in the validation set with 0.964 accuracy and minimal variance about that number. Therefore, in our case we can conclude that 32 dimensions was enough for the transformer to learn the complex relationships between the pixels and digits. 
+In our training run, we found that 32 dimensions fit the data best in the validation set with 0.964 accuracy and minimal variance about that number. Therefore, in our case we can conclude that 32 dimensions was enough for the transformer to learn the complex relationships between the pixels and digits. One caveat to mention is that for this problem, since the images are just 8 x 8 pixels, a transformer probably won't beat a simpler model such as an MLP. This is just a demonstration.
 
 ## Conclusion
 Congradulations, you have created a modern machine learning model that is the same architecture as the large language models that mystify billions of people. While this tutorial is much simpler than these massive models, these concepts are very important to how they work. If you want to continue learning about transformers, consider looking into the depth of the network, how we can use different configurations for the learning rate, backpropagation, attention heads, and much more. 
