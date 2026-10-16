@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: "Tutorial Blog - How to Build a Transformer"
+  title: "Tutorial Blog"
   navbar:
     left:
       - href: index.qmd
